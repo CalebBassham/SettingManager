@@ -1,0 +1,6 @@
+.idea
+target
+*.iml
+Makefile
+dependency-reduced-pom.xml
+deploy

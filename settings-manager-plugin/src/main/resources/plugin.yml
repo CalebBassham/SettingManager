@@ -1,0 +1,7 @@
+name: SettingsManagerLib
+version: 1.0.0
+main: me.calebbassham.settingsmanager.BukkitPlugin
+
+commands:
+  settings:
+    aliases: [s]
