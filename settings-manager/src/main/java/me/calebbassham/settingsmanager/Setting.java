@@ -18,6 +18,21 @@ public class Setting<T> {
         this.type = initialValue.getClass();
     }
 
+    public Setting(Class type) {
+        this.name = String.join(" ", this.getClass().getCanonicalName()
+                .replace("Setting", "")
+                .split("[A-Z]+([^A-Z]+)?"));
+        this.type = type;
+    }
+
+    public Setting(T initialValue) {
+        this.name = String.join(" ", this.getClass().getCanonicalName()
+                .replace("Setting", "")
+                .split("[A-Z]+([^A-Z]+)?"));
+        this.value = initialValue;
+        this.type = initialValue.getClass();
+    }
+
     public String getName() {
         return name;
     }
