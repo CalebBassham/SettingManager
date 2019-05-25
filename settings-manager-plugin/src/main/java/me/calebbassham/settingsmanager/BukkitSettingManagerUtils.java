@@ -31,7 +31,13 @@ public class BukkitSettingManagerUtils {
         // pass remaining args to setting parser
 
         String toParse = String.join(" ", args2);
-        SettingParser parser = manager.getParser(setting.getType());
+
+        SettingParser parser;
+        if (setting instanceof SettingParser) {
+            parser = (SettingParser) setting;
+        } else {
+            parser = manager.getParser(setting.getType());
+        }
 
         if (setting.getType().isEnum()) {
             Enum value = Enum.valueOf(setting.getType(), toParse.replace(" ", "_").toUpperCase());
