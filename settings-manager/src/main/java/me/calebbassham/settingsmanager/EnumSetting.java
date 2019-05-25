@@ -14,6 +14,14 @@ public class EnumSetting<T extends Enum> extends Setting<T> implements SettingVa
         super(name, initialValue);
     }
 
+    public EnumSetting(Class<T> clazz) {
+        super(clazz);
+    }
+
+    public EnumSetting(T initialValue) {
+        super(initialValue);
+    }
+
     @Override
     public String displayValue() {
         return getName().replace("_", " ").toLowerCase();
