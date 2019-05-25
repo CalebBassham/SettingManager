@@ -26,11 +26,23 @@ public class SettingsManager {
         return settings.get(name.toLowerCase());
     }
 
-    public <U extends Setting> Setting getSetting(final Class<U> clazz) {
+    public <T, U extends Setting<T>> Setting<T> getSetting(final Class<U> clazz) {
         return settings.values().stream()
                 .filter(setting -> setting.getClass().equals(clazz))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public <T, U extends Setting<T>> T getValue(Class<U> clazz) {
+        return getSetting(clazz).getValue();
+    }
+
+    public <T> T getValue(String name) {
+        try {
+            return (T) getSetting(name).getValue();
+        } catch (ClassCastException e) {
+            return null;
+        }
     }
 
     public void registerParser(SettingParser parser) {
