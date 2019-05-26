@@ -12,9 +12,11 @@ public class BooleanSettingParser implements SettingParser<Boolean> {
         switch (string.toLowerCase()) {
             case "true":
             case "yes":
+            case "enabled":
                 return true;
             case "false":
             case "no":
+            case "disabled":
                 return false;
         }
 

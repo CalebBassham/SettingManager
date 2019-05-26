@@ -1,5 +1,9 @@
 package me.calebbassham.settingsmanager;
 
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Setting<T> {
 
     private String name;
@@ -19,18 +23,26 @@ public class Setting<T> {
     }
 
     public Setting(Class type) {
-        this.name = String.join(" ", this.getClass().getCanonicalName()
-                .replace("Setting", "")
-                .split("[A-Z]+([^A-Z]+)?"));
+        this.name = getNameFromClass(this.getClass());
         this.type = type;
     }
 
     public Setting(T initialValue) {
-        this.name = String.join(" ", this.getClass().getCanonicalName()
-                .replace("Setting", "")
-                .split("[A-Z]+([^A-Z]+)?"));
+        this.name = getNameFromClass(this.getClass());
         this.value = initialValue;
         this.type = initialValue.getClass();
+    }
+
+    private String getNameFromClass(Class clazz) {
+        ArrayList<String> nameParts = new ArrayList<>();
+        Pattern p = Pattern.compile("[A-Z]+(?:[^A-Z]+)?");
+        Matcher m = p.matcher(clazz.getSimpleName());
+        while (m.find()) {
+            String str = m.group(0);
+            if (str.equalsIgnoreCase("setting")) continue;
+            nameParts.add(str);
+        }
+        return String.join(" ", nameParts);
     }
 
     public String getName() {

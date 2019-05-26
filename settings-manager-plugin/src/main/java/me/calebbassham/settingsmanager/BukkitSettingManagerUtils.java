@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class BukkitSettingManagerUtils {
 
-    public static void handleCommand(SettingsManager manager, String[] args) throws SettingParserException, SettingValueValidatorException, CommandException {
+    public static Setting handleCommand(SettingsManager manager, String[] args) throws SettingParserException, SettingValueValidatorException, CommandException {
         // combine each arg until a setting is found
 
         LinkedList<String> args2 = new LinkedList<>(Arrays.asList(args));
@@ -42,7 +42,7 @@ public class BukkitSettingManagerUtils {
         if (setting.getType().isEnum()) {
             Enum value = Enum.valueOf(setting.getType(), toParse.replace(" ", "_").toUpperCase());
             setting.setValue(value);
-            return;
+            return null;
         }
 
         if (parser == null) throw new SettingParserException("No parser for type \"" + setting.getType().getName() + "\"");
@@ -50,6 +50,7 @@ public class BukkitSettingManagerUtils {
         Object value = parser.parse(toParse);
 
         setting.setValue(value);
+        return setting;
     }
 
     public static List<String> handleTabCompleter(SettingsManager manager, String[] args) {
@@ -62,8 +63,8 @@ public class BukkitSettingManagerUtils {
             String toAdd = args2.poll();
             if (toAdd == null) {
                 return manager.getSettings().stream()
-                        .map(s -> s.getName().toLowerCase())
-                        .filter(name -> name.startsWith(String.join(" ", args).toLowerCase()))
+                        .map(Setting::getName)
+                        .filter(name -> name.toLowerCase().startsWith(String.join(" ", args).toLowerCase()))
                         .map(name -> name.split(" "))
                         .map(parts -> Arrays.stream(parts, args.length - 1, parts.length).collect(Collectors.joining(" ")))
                         .collect(Collectors.toList());

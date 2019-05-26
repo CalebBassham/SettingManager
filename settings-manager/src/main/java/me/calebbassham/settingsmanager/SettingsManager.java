@@ -4,11 +4,16 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.function.Predicate;
 
 public class SettingsManager {
 
     private HashMap<String, Setting> settings = new HashMap<>();
     private HashSet<SettingParser> settingParsers = new HashSet<>();
+
+    public SettingsManager() {
+        registerProvidedParsers();
+    }
 
     public void register(Setting setting) {
         this.settings.put(setting.getName().toLowerCase(), setting);
