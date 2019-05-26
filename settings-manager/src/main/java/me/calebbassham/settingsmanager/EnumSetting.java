@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class EnumSetting<T extends Enum> extends Setting<T> implements SettingValueSuggester {
+public class EnumSetting<T extends Enum> extends Setting<T> implements SettingValueSuggester, SettingParser<T> {
 
     public EnumSetting(String name, Class<T> clazz) {
         super(name, clazz);
@@ -24,7 +24,7 @@ public class EnumSetting<T extends Enum> extends Setting<T> implements SettingVa
 
     @Override
     public String displayValue() {
-        return getName().replace("_", " ").toLowerCase();
+        return getValue().name().replace("_", " ").toLowerCase();
     }
 
     @Override
@@ -35,5 +35,19 @@ public class EnumSetting<T extends Enum> extends Setting<T> implements SettingVa
                 .map(name -> name.replace("_", " "))
                 .map(String::toLowerCase)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Class<T> geType() {
+        return this.getType();
+    }
+
+    @Override
+    public T parse(String toParse) throws SettingParserException {
+        try {
+            return (T) Enum.valueOf(getType(), toParse.replace(" ", "_").toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new SettingParserException("\"" + toParse + "\" is not an allowed value of " + getName() + ".");
+        }
     }
 }
